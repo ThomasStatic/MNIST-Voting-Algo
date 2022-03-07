@@ -1,7 +1,8 @@
 # APSC100Mod3QMINDProject
 
-Hey guys,
+To upload your code to GitHub, hit the green upload file button.
 
-If you're reading this, you've offically made it to our team's GitHub repository. 
+If you make changes to the file, as long as the file name remains the same, just follow the same process and GitHub will handle the rest.
 
-This file (called Read Me) is where we'll typically leave notes explaining what the project is, when it was last updated, future goals, etc. In essence, it's just a note to store our project description and progress.
+Cheers
+Thomas
