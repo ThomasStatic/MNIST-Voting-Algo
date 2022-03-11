@@ -1,0 +1,8 @@
+Python Machine Learning Cookbook
+https://app.knovel.com/kn/resources/kpPMLCE00C/toc?b-q=python&include_synonyms=no&q=python&sort_on=default
+Chapter 10 - Analyzing Image Content
+
+Python Machine Learning
+https://app.knovel.com/kn/resources/kpPML0000S/toc?b-q=python&include_synonyms=no&q=python&sort_on=default
+Chapter 9 - Supervised KNN Tutorial
+
