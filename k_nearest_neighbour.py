@@ -32,13 +32,15 @@ matplotlib.pyplot.show()
 
 #To calculate the distance between two points, we use the distance formula
 #We will do this a lot, so it's worth making a function
-def euclidean_distance(point1, point2, dimension):
+def euclidean_distance(pt1, pt2, dimension):
 	distance = 0
 
 	#For x in the dimension (2D vs 3D)
 	for x in range(dimension):
+
 		#Distance equals the square of position 1 - position 2
-		distance += numpy.square(point1[x], - point2[x])
+		
+		distance += numpy.square(pt1[x] - pt2[x])
 		#Return the squareroot of this result
 	return numpy.sqrt(distance)
 
@@ -71,7 +73,7 @@ def knn(training_points, test_point, k):
 	#Extract the top k neighbours
 	for x in range(k):
 		#Adds the first index of the sorted distances to the neighbours list
-		neighbours.append(sorted_d[x][0])
+		neighbours.append(sorted_d[x] [0])
 
 	#This finds out the class of each neighbour
 	class_counter = {}
@@ -89,13 +91,51 @@ def knn(training_points, test_point, k):
 	sorted_counter = sorted(class_counter.items(), key = operator.itemgetter(1), reverse = True)
 
 	#Return the class with the most count as well as neighbours as found
-	return(sorted_counter[0][0], neighbours)
+	return(sorted_counter[0] [0], neighbours)
 
 #This is the test point used in this example
-test_set = [[3,3.9]]
+test_set = [[3, 3.9]]
 test = pandas.DataFrame(test_set)
 cls, neighbours = knn(data, test, 5)
 print("Predicted class: " + cls)
 
+
+#The following section of code is purely for data visualisation reasons
+
+#If the class is A, make it red, otherwise make the point blue
+colours = ['r' if i == 'A' else 'b' for i in data['Class (A or B)']]
+#Generate the a scatter plot with axis names x and y, using the colours declared in line 106
+ax = data.plot(kind = 'scatter', x = 'x', y = 'y', c = colours)
+#.lim() limits the length of axis
+matplotlib.pyplot.xlim(0,7)
+matplotlib.pyplot.ylim(0,7)
+
+#Plot the test point
+#Plot points (0,0) and (0,1), based from the y origin
+matplotlib.pyplot.plot(test_set[0][0], test_set[0][1], "yo", markersize = '9')
+
+#This sets the k value to go down in intervals of 2 (from 7 to 1)
+for k in range(7,0,-2):
+	cls,neighbours = knn(data,test,k)
+	print("===========")
+	print("k = ", k)
+	print("Class ", cls)
+	print("neighbours")
+	print(data.iloc[neighbours])
+
+	#From the neighbours list, grab the last index value
+	furthest_point = data.iloc[neighbours].tail(1)
+
+	#Draw a circle that touches both the test point and the furthest point (for k)
+	radius = euclidean_distance(test, furthest_point.iloc[0], 2)
+
+	#Display the circle in red if classification is A, otherwise display it as blue
+	c = 'r' if cls == 'A' else 'b'
+	#NOTE!!!!!! COLOR, NOT COLOUR HERE!!!!!!!
+	circle = matplotlib.pyplot.Circle((test_set[0][0], test_set[0][1]), radius, color = c, alpha = 0.3) 
+	ax.add_patch(circle)
+
+matplotlib.pyplot.gca().set_aspect('equal', adjustable = 'box')
+matplotlib.pyplot.show()
 
 
