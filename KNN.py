@@ -66,14 +66,13 @@ f.close()
 train_X = blackOrWhite(train_X)
 test_X = blackOrWhite(test_X)
 
-color_sum = []
-
 # plot images imported through tensorflow (example set displaying only 9 images)
 for i in range (9):
     pyplot.subplot(330+1+i)
     #print(f"Example number: {i+1} ")
     pyplot.imshow(train_X[i], cmap=pyplot.get_cmap('gray'))
     #plt.show()
+
 
 def euclidean_distance(point1, point2):
         """Determine the distance between reference point and number's point"""
@@ -118,9 +117,15 @@ class KNN:
         for i in range(len(X_test)):
             distance = np.array([euclidean_distance(X_test[i], x_t) for x_t in 
                 self.X_train])
+            distance.tolist()
+            distance.tolist()
+
 
             # Sort the distances out to a useable format
-            dist_sorted = distance.argsort()[:2] #Note: changed self.k to 0... effect is?
+            dist_sorted = distance.argsort()[:self.k]
+             
+
+
 
             # Empty tuple for storing neighbour counts
             neighbour_count = {}
