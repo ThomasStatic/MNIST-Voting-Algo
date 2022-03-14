@@ -1,9 +1,15 @@
 # Import Libraries
+import pandas
 import csv
 import numpy as np
 from keras.datasets import mnist
 from matplotlib import pyplot
 import matplotlib.pyplot as plt
+import operator
+import seaborn
+from sklearn import svm, datasets
+import matplotlib.patches as mpatches
+from KNN_Class import KNN
 
 # import data through tensorflow
 
@@ -60,8 +66,20 @@ f.close()
 train_X = blackOrWhite(train_X)
 test_X = blackOrWhite(test_X)
 
+color_sum = []
+
 # plot images imported through tensorflow (example set displaying only 9 images)
 for i in range (9):
     pyplot.subplot(330+1+i)
+    #print(f"Example number: {i+1} ")
     pyplot.imshow(train_X[i], cmap=pyplot.get_cmap('gray'))
-    plt.show()
+    #plt.show()
+
+KNN() #NOTE: We should add a function that determines the optimal k value rather than relying on the default k = 3
+
+KNN.x_train = train_X
+KNN.y_train = train_y
+
+
+
+
