@@ -6,3 +6,7 @@ Python Machine Learning
 https://app.knovel.com/kn/resources/kpPML0000S/toc?b-q=python&include_synonyms=no&q=python&sort_on=default
 Chapter 9 - Supervised KNN Tutorial
 
+A Beginner's Guide to KNN and MNIST
+https://medium.com/analytics-vidhya/a-beginners-guide-to-knn-and-mnist-handwritten-digits-recognition-using-knn-from-scratch-df6fb982748a
+
+
