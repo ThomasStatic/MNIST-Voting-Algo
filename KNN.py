@@ -9,7 +9,7 @@ import operator
 import seaborn
 from sklearn import svm, datasets
 import matplotlib.patches as mpatches
-from KNN_Class import KNN
+#from KNN_Class import KNN
 
 # import data through tensorflow
 
@@ -75,10 +75,76 @@ for i in range (9):
     pyplot.imshow(train_X[i], cmap=pyplot.get_cmap('gray'))
     #plt.show()
 
-KNN() #NOTE: We should add a function that determines the optimal k value rather than relying on the default k = 3
+def euclidean_distance(point1, point2):
+        """Determine the distance between reference point and number's point"""
 
-KNN.x_train = train_X
-KNN.y_train = train_y
+        distance = 0
+
+        # Square the sum of all dimension equal values
+        #for x in range(dimension):
+        distance += np.square(point1 - point2)
+
+        # Return the root value of this sum
+        return np.sqrt(distance)
+
+
+class KNN:
+    """A class for handling the KNN functionalities of the program"""
+
+
+    def __init__(self, k = 3):
+        """ Initialize all attributes of KNN function"""
+        # NOTE: k value defaulted to k = 3
+        self.k = k
+
+    def fit(self, x_train, y_train):
+        """Add the training data as an attribute of the class"""
+        self.X_train = x_train
+        self.Y_train = y_train
+
+
+    
+
+    def predict_number(self, X_test):
+        """Predict the value of the currently tested number"""
+
+        # Create an empty list to store the predictions
+        predictions = []
+
+        # Ensures we are only using 1 axis
+      #  dimension = X_test.shape[1]
+
+        # Find an x for each individual value of x we find
+        for i in range(len(X_test)):
+            distance = np.array([euclidean_distance(X_test[i], x_t) for x_t in 
+                self.X_train])
+
+            # Sort the distances out to a useable format
+            dist_sorted = distance.argsort()[:2] #Note: changed self.k to 0... effect is?
+
+            # Empty tuple for storing neighbour counts
+            neighbour_count = {}
+
+            for index in dist_sorted:
+                if self.Y_train[index] in neighbour_count:
+                    neighbour_count[self.Y_train[index]] += 1
+                else:
+                    neighbour_count[self.Y_train[index]] = 1
+
+            # Sort the above results for number of neighbours
+            sorted_neighbour_count = sorted(neighbour_count.items(), 
+                key = operator.itemgetter(1), reverse = True)
+            predictions.append(sorted_neighbour_count[0][0])
+        
+        return predictions
+
+
+knn = KNN(k = 3) #NOTE: We should add a function that determines the optimal k value rather than relying on the default k = 3
+
+knn.fit(train_X, train_y)
+pred = knn.predict_number(test_X)
+print(pred)
+
 
 
 
