@@ -13,8 +13,9 @@ class KNN:
 		self.X_train = x_train
 		self.Y_train = y_train
 
-	def predict(self, X_test):
+	def predict(self, X_test, Y_test):
 		predictions = []
+
 		for i in range(len(X_test)):
 			dist = np.array([euc_dist(X_test[i], x_t) for x_t in self.X_train])
 			dist_sorted = dist.argsort()[:self.K]
@@ -26,15 +27,20 @@ class KNN:
 					neigh_count[self.Y_train[idx]] = 1
 			sorted_neigh_count = sorted(neigh_count.items(), key = operator.itemgetter(1), reverse = True)
 			predictions.append(sorted_neigh_count[0][0])
+			print(f"I think this number is... {sorted_neigh_count[0][0]}")
+			print(f"This number is actually: {Y_test[i]}")
 		return predictions
 
 
 from sklearn.datasets import load_digits
+from sklearn.preprocessing import LabelBinarizer
 mnist = load_digits()
 #print(mnist.data.shape)
 
 X = mnist.data
 y = mnist.target
+
+
 
 from sklearn.model_selection import train_test_split
 
@@ -48,5 +54,5 @@ X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.25, random
 
 model = KNN(K = 3)
 model.fit(X_train, y_train)
-pred = model.predict(X_test)
-print(pred)
+pred = model.predict(X_test, y_test)
+#print(pred)
