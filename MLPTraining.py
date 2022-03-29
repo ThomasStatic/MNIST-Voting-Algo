@@ -29,7 +29,7 @@ model.add(layers.Dense(64, activation='relu'))
 model.add(layers.Dense(10, activation='sigmoid'))
 model.summary()
 model.compile(optimizer='adam', loss=tf.keras.losses.SparseCategoricalCrossentropy(), metrics=['accuracy'])
-history = model.fit(xtrain, ytrain, epochs=75, batch_size=512, validation_data=(xtest, ytest))
+history = model.fit(xtrain, ytrain, epochs=50, batch_size=256, validation_data=(xtest, ytest))
 
 
 
