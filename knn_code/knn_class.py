@@ -59,7 +59,7 @@ errors = [1-x for x in cross_validation_scores]
 # The optimal k is the k that yields the highest accuracy
 optimal_k = potential_k_values[cross_validation_scores.index(max(cross_validation_scores))]
 
-print(f"The optimal k value is {optimal_k}")
+print(f"The optimal k value is {optimal_k} with an accuracy of {cross_validation_scores[optimal_k]}%")
 
 
 # Plot the data found
