@@ -4,12 +4,6 @@ from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split, cross_val_score
 
 
-#Import the MNIST data set
-mnist_dataset = load_digits()
-
-X = mnist_dataset.data
-y = mnist_dataset.target
-
 class KNN:
 	"""A class to manage the functionalities of the KNN model"""
 
@@ -27,13 +21,14 @@ class KNN:
 
 		# Default the print predictions flag to false
 		self.print_predictions = 0
+		print("(KNN class) Default setting is to not print the predictions!")
 
 
 	def euclidean_function(self, point1, point2):
 		"""Determine the distance between two input points (white space versus 
 		black space) for later comparision against test case"""
 
-		distance = numpy.sqrt(numpy.square(point2-point1))
+		distance = numpy.sqrt(numpy.sum((point2-point1)**2))
 		return distance
 
 	def predict_number(self, X_test, Y_test, loops = 0):
@@ -52,11 +47,11 @@ class KNN:
 
 			# For each index of the test set, create an array of the distances
 			# between the testing and the training data
-			distances = numpy.array([euclidean_function(X_test[i], x_train) for 
+			distances = numpy.array([self.euclidean_function(X_test[i], x_train) for 
 				x_train in self.X_train])
 
 			# Sort the distances by slicing the list by the value of k
-			distances_sorted = distance.argsort()[:self.k]
+			distances_sorted = distances.argsort()[:self.k]
 
 			# Tuple to store the number of neighbours near each data point tested
 			neighbour_count = {}
@@ -72,7 +67,7 @@ class KNN:
 
 				# IMPORTANT: This is setting the default value in the tuple to 1
 				else:
-					neighbour_count[self.Y_train[j]] += 1
+					neighbour_count[self.Y_train[j]] = 1
 
 				# Grab the total tally of the neighbour count at this index so 
 				# we can use/display the prediction later
@@ -81,23 +76,37 @@ class KNN:
 				predictions.append(sorted_neighbour_count[0][0])
 
 				if self.print_predictions == 1:
-					print(f"KNN Prediction: {sorted_neighbour_count[0][0]}")
+					print(f"\nKNN Prediction: {sorted_neighbour_count[0][0]}")
 					print(f"Actual Number: {Y_test[i]}")
 
-			return predictions
+		return predictions
 
-		def _change_print_flag(self):
-			"""Change the flag for whether or not predictions are printed"""
+	def _change_print_flag(self):
+		"""Change the flag for whether or not predictions are printed"""
 
-			# If originally the program was set not to print results, now print
-			if self.print_predictions == 0:
-				self.print_predictions == 1
-				print("Prediction results will now be printed!")
+		# If originally the program was set not to print results, now print
+		if self.print_predictions == 0:
+			self.print_predictions = 1
+			print("Prediction results will now be printed!")
+			return 1
 
-			# If originally the program was set to print results, no longer print
-			elif self.print_predictions == 1:
-				self.print_predictions == 0
-				print("Prediction results will no longer be printed!")
+		# If originally the program was set to print results, no longer print
+		if self.print_predictions == 1:
+			self.print_predictions = 0
+			print("Prediction results will no longer be printed!")
+			return 0
+
+
+#Import the MNIST data set
+mnist_dataset = load_digits()
+
+X = mnist_dataset.data
+y = mnist_dataset.target
+
+# NOTE: You can randomize this split with a seed using random_state = INT
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
+
+setup_model = KNN(X_train, y_train, k = 3)
 
 
 
