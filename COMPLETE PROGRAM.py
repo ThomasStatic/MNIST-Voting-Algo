@@ -11,6 +11,7 @@ import matplotlib.pyplot as mplplt
 from sklearn.neighbors import KNeighborsClassifier
 import matplotlib.patches as mpatches
 from sklearn import svm, datasets
+from sklearn import datasets,svm,metrics
 
 (xtrain, ytrain), (xtest, ytest) = tf.keras.datasets.mnist.load_data(
     path='mnist.npz'
@@ -43,56 +44,8 @@ y = mnist_dataset.target
 # NOTE: You can randomize this split with a seed using random_state = 1-999
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
-# Empty list to store the results of our cross validation
-cross_validation_scores = []
 
-# Create a list of the potential (odd) values of k (k as in KNN, 10 folds used)
-potential_k_values = list(range(1, int(len(X) * ((9) / 10))))
-# Strip all multiples of 3 from the list
-potential_k_values = [k for k in potential_k_values if k % 3 != 0]
-
-# Perform cross validation:
-
-test_model = KNeighborsClassifier(n_neighbors=1)
-test_model.fit(X, y)
-
-# A list to store the values of k we want to later plot
-k_values_for_graph = []
-
-for k in potential_k_values:
-    test_model = KNeighborsClassifier(n_neighbors=k)
-
-    # 10 folds used for cross validation
-    scores = cross_val_score(test_model, X, y, cv=10, scoring='accuracy')
-
-    # Take the average accuracy score from each test
-    mean = scores.mean()
-
-    # Add the mean score to the list for future use
-    cross_validation_scores.append(mean)
-    # print(f"(KNN) k value: {k}  Accuracy: {mean}")
-
-    k_values_for_graph.append(k)
-
-    # We must break out of the loop as the length of the potential k values is extremely long
-    # with results that are easily predictable after having noticed the general data trend
-    if k > 150:
-        break
-
-# List to store the value of error at all different k's
-errors = [1 - x for x in cross_validation_scores]
-
-# The optimal k is the k that yields the highest accuracy
-optimal_k = potential_k_values[cross_validation_scores.index(max(cross_validation_scores))]
-
-print(f"The optimal k value is {optimal_k} with an accuracy of {cross_validation_scores[optimal_k]}%")
-
-# Plot the data found
-mplplt.plot(k_values_for_graph, cross_validation_scores)
-mplplt.xlabel("Number of Neighbours K")
-mplplt.ylabel("Accuracy")
-mplplt.title("Number of Neighbours vs Accuracy of Prediction", size=16)
-mplplt.show()
+optimal_k =1
 
 
 class KNN:
@@ -111,7 +64,7 @@ class KNN:
 
         # Default the print predictions flag to false
         self.print_predictions = 0
-        print("(KNN class) Default setting is to not print the predictions!")
+        # print("(KNN class) Default setting is to not print the predictions!")
 
     def euclidean_function(self, point1, point2):
         """Determine the distance between two input points (white space versus
@@ -183,6 +136,29 @@ class KNN:
             print("Prediction results will no longer be printed!")
             return 0
 
+#SVM code
+#
+# n_samples = len(mnist_dataset.images)
+# data = mnist_dataset.images.reshape((n_samples, -1))
+#
+# # Declare classifier and adjustable gamma number
+classifier = svm.SVC(gamma=0.001)
+#
+# X = mnist_dataset.data
+# y = mnist_dataset.target
+#
+# # NOTE: You can randomize this split with a seed using random_state = 1-999
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+
+#  Image classification for training data
+(X_train, y_train), (X_test, y_test) = tf.keras.datasets.mnist.load_data(
+    path='mnist.npz'
+)
+
+classifier.fit(X_train, y_train)
+
+svmprediction = classifier.predict(X_test)
+
 
 knnmodel = KNN(xtrain, ytrain, optimal_k)
 knnPrediction = knnmodel.predict_number(xtest, ytest, 40)
@@ -193,8 +169,10 @@ vote = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 vote[mlpPrediction] += 56.5
 vote[knnPrediction[35]] += 38.6
+vote[svmprediction[35]] += 50.0
 print(vote)
 tmp = (max(vote))
 highestVote = vote.index(tmp)
 
 print(highestVote)
+print(y_test[35])
