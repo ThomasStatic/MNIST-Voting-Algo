@@ -1,3 +1,4 @@
+
 # Import libraries
 import matplotlib.pyplot as plt
 from sklearn import datasets,svm,metrics
@@ -47,3 +48,4 @@ print(f"Confusion matrix:\n{display.confusion_matrix}")
 
 # Show plot on screen
 plt.show()
+
